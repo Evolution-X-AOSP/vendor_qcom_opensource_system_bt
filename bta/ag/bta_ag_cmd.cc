@@ -723,6 +723,8 @@ void bta_ag_send_call_inds(tBTA_AG_SCB* p_scb, tBTA_AG_RES result) {
     APPL_TRACE_IMP("%s: call/call setup ended, cancel xsco collision timer",
                     __func__);
     alarm_cancel(p_scb->xsco_conn_collision_timer);
+    p_scb->no_of_xsco_retry = 0;
+    p_scb->no_of_xsco_trials = 0;
 
     if (is_blacklisted) {
        APPL_TRACE_IMP("%s: Enable sniff mode for device: %s",
