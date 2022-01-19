@@ -772,8 +772,6 @@ static void bta_ag_create_pending_sco(tBTA_AG_SCB* p_scb, bool is_local) {
 
 
   /* If there is timer running for xSCO setup, cancel it */
-  p_scb->no_of_xsco_trials = 0;
-  p_scb->no_of_xsco_retry = 0;
   alarm_cancel(p_scb->xsco_conn_collision_timer);
 
 #if (TWS_AG_ENABLED == TRUE)
