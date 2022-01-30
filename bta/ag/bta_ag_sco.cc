@@ -1767,12 +1767,23 @@ void bta_ag_sco_event(tBTA_AG_SCB* p_scb, uint8_t event) {
           }
           else {
 #endif
-          /* If not closing scb, just close it */
-          if (p_scb != p_sco->p_curr_scb) {
-            /* remove listening connection */
-            bta_ag_remove_sco(p_scb, false);
-          } else
-            p_sco->state = BTA_AG_SCO_SHUTTING_ST;
+            /* If not closing scb, just close it */
+            if (p_scb != p_sco->p_curr_scb) {
+              /* remove listening connection */
+              bta_ag_remove_sco(p_scb, false);
+            } else {
+              // if RFCOMM conn closed, move to shutdown/listen state
+              if (p_scb->svc_conn) {
+                p_sco->state = BTA_AG_SCO_SHUTTING_ST;
+              } else {
+                APPL_TRACE_IMP("RFCOMM got disconnected before SCO close");
+                if (!bta_ag_other_scb_open(p_scb)) {
+                  p_sco->state = BTA_AG_SCO_SHUTDOWN_ST;
+                } else {/* Other instance is still listening */
+                  p_sco->state = BTA_AG_SCO_LISTEN_ST;
+                }
+              }
+            }
 
 #if (TWS_AG_ENABLED == TRUE)
           }
