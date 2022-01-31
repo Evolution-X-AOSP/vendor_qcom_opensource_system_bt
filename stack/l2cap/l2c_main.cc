@@ -925,8 +925,9 @@ static void process_l2cap_cmd(tL2C_LCB* p_lcb, uint8_t* p, uint16_t pkt_len) {
           return;
         }
 
-        if (p + L2CAP_CMD_CREDIT_BASED_CONN_MIN_LEN > p_pkt_end ||
-            cmd_len > L2CAP_CMD_CREDIT_BASED_CONN_MAX_LEN) {
+      if ((p + L2CAP_CMD_CREDIT_BASED_CONN_MIN_LEN > p_pkt_end) ||
+          (cmd_len > L2CAP_CMD_CREDIT_BASED_CONN_MAX_LEN) ||
+          (cmd_len < L2CAP_CMD_CREDIT_BASED_CONN_MIN_LEN)) {
           LOG(ERROR) << "invalid cmd length";
           return;
         }
@@ -990,6 +991,13 @@ static void process_l2cap_cmd(tL2C_LCB* p_lcb, uint8_t* p, uint16_t pkt_len) {
       case L2CAP_CMD_CREDIT_BASED_RECONFIGURE_REQ:
         if (p + 4 > p_next_cmd) {
           android_errorWriteLog(0x534e4554, "74202041");
+          return;
+        }
+
+        if ((p + L2CAP_CMD_CREDIT_BASED_RECONFIG_MIN_LEN > p_pkt_end) ||
+            (cmd_len > L2CAP_CMD_CREDIT_BASED_RECONFIG_MAX_LEN) ||
+            (cmd_len < L2CAP_CMD_CREDIT_BASED_RECONFIG_MIN_LEN)) {
+          LOG(ERROR) << "invalid cmd length";
           return;
         }
 

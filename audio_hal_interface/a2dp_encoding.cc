@@ -1614,7 +1614,9 @@ bool a2dp_get_selected_hal_codec_config_2_1(CodecConfiguration_2_1* codec_config
            pclient_cbs[profile - 1]->get_frame_length_cb(lc3Config.rxConfigSet);
 
       lc3Config.txConfig.bitsPerSample = BitsPerSample::BITS_24;
-      lc3Config.txConfig.numBlocks = 1;
+
+      lc3Config.txConfig.numBlocks =
+           pclient_cbs[profile - 1]->get_lc3_blocks_per_sdu(lc3Config.rxConfigSet);
     }
 
     uint8_t cs[16] = {0};
@@ -1679,8 +1681,11 @@ bool a2dp_get_selected_hal_codec_config_2_1(CodecConfiguration_2_1* codec_config
           pclient_cbs[profile - 1]->get_mtu_cb(0, lc3Config.rxConfigSet);
       lc3Config.rxConfig.frameDuration =
           pclient_cbs[profile - 1]->get_frame_length_cb(lc3Config.rxConfigSet);
+
       lc3Config.rxConfig.bitsPerSample = BitsPerSample::BITS_24;
-      lc3Config.rxConfig.numBlocks = 1;
+
+      lc3Config.rxConfig.numBlocks =
+          pclient_cbs[profile - 1]->get_lc3_blocks_per_sdu(lc3Config.rxConfigSet);
     } else if (type == GCP_RX_PROFILE) {
       LOG(ERROR) << __func__ << ": Filling Gaming VBC values";
 
@@ -1701,8 +1706,11 @@ bool a2dp_get_selected_hal_codec_config_2_1(CodecConfiguration_2_1* codec_config
           pclient_cbs[profile - 1]->get_mtu_cb(0, lc3Config.rxConfigSet);
       lc3Config.rxConfig.frameDuration =
           pclient_cbs[profile - 1]->get_frame_length_cb(lc3Config.rxConfigSet);
+
       lc3Config.rxConfig.bitsPerSample = BitsPerSample::BITS_24;
-      lc3Config.rxConfig.numBlocks = 1;
+
+      lc3Config.rxConfig.numBlocks =
+           pclient_cbs[profile - 1]->get_lc3_blocks_per_sdu(lc3Config.rxConfigSet);
 
       //LC3Q related Info for VBC
       if (pclient_cbs[profile - 1]->get_is_codec_type_lc3q(lc3Config.rxConfigSet)) {
