@@ -1622,9 +1622,15 @@ static bool btif_av_state_opening_handler(btif_sm_event_t event, void* p_data,
          peer_handle = btif_rc_get_connected_peer_handle(btif_av_cb[index].peer_bda);
 
        if (peer_handle != BTRC_HANDLE_NONE) {
-         BTIF_TRACE_WARNING("%s: RC connected to %s, disc RC too since AV is being aborted",
+         if (interop_match_addr_or_name(INTEROP_KEEP_RC_CONNECTED_AV_DISCONNECTED,
+             &(btif_av_cb[index].peer_bda))){
+              BTIF_TRACE_WARNING("%s: RC connected to %s, Don't disc RC although AV is aborted",
                  __func__, btif_av_cb[index].peer_bda.ToString().c_str());
-         BTA_AvCloseRc(peer_handle);
+          } else {
+              BTIF_TRACE_WARNING("%s: RC connected to %s, disc RC too since AV is being aborted",
+                __func__, btif_av_cb[index].peer_bda.ToString().c_str());
+              BTA_AvCloseRc(peer_handle);
+         }
        }
        BTA_AvClose(btif_av_cb[index].bta_handle);
        btif_queue_advance();

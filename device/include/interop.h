@@ -289,6 +289,8 @@ typedef enum {
   //are sent before sco is opened
   INTEROP_DELAY_SCO_FOR_MO_CALL,
 
+  //some remotes will disconnect ACL link if both RC and AV are disconnected
+  INTEROP_KEEP_RC_CONNECTED_AV_DISCONNECTED,
   END_OF_INTEROP_LIST
 } interop_feature_t;
 

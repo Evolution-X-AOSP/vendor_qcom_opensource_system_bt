@@ -1885,6 +1885,8 @@ static void read_report_cb(uint16_t conn_id, tGATT_STATUS status,
       memcpy(pp, value, len);
 
       hs_data.rsp_data.p_rpt_data = p_buf;
+      bta_hh_co_get_rpt_rsp(hs_data.handle, hs_data.status, p_buf->data,
+                            p_buf->len);
     }
   }
 
@@ -1965,6 +1967,7 @@ static void write_report_cb(uint16_t conn_id, tGATT_STATUS status,
   cback_data.handle = p_dev_cb->hid_handle;
   cback_data.status = (status == GATT_SUCCESS) ? BTA_HH_OK : BTA_HH_ERR;
   p_dev_cb->w4_evt = 0;
+  bta_hh_co_set_rpt_rsp(cback_data.handle, cback_data.status);
   (*bta_hh_cb.p_cback)(cb_evt, (tBTA_HH*)&cback_data);
 }
 /*******************************************************************************
